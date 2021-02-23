@@ -10,17 +10,18 @@ properties([
     ])
 ])
 
-
-try {
-    stage('Build') {
-        echo 'Build', 'stage'
+node {
+    try {
+        stage('Build') {
+            echo 'Build', 'stage'
+        }
+    } catch (e) {
+        currentBuild.result = 'FAILED'
+        def strErr = "Unexpected error at outer catch: ${e.getMessage()}"
+        println(strErr)
+        throw e
+    } finally {
+        // update the summary of docker environments
+        currentBuild.result = currentBuild.result ?: 'SUCCESS'
     }
-} catch (e) {
-    currentBuild.result = 'FAILED'
-    def strErr = "Unexpected error at outer catch: ${e.getMessage()}"
-    println(strErr)
-    throw e
-} finally {
-    // update the summary of docker environments
-    currentBuild.result = currentBuild.result ?: 'SUCCESS'
 }
