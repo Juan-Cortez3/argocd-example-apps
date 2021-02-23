@@ -13,7 +13,7 @@ properties([
 node {
     try {
         stage('Build') {
-            echo 'Build', 'stage'
+            echo 'Hello world'
         }
     } catch (e) {
         currentBuild.result = 'FAILED'
