@@ -1,0 +1,26 @@
+properties([
+    parameters([
+        string(
+            name: 'instanceName',
+            defaultValue: 'example',
+            description: '<b>The name of the <b>Application instance</b> in the Kubernetes cluster.</b><br/>' +
+                'Note: names must be no longer than 63 characters, must start and end with a lowercase' +
+                'letter or number, and may contain lowercase letters, numbers, and hyphens.'
+        )
+    ])
+])
+
+
+try {
+    stage('Build') {
+        echo 'Build', 'stage'
+    }
+} catch (e) {
+    currentBuild.result = 'FAILED'
+    def strErr = "Unexpected error at outer catch: ${e.getMessage()}"
+    println(strErr)
+    throw e
+} finally {
+    // update the summary of docker environments
+    currentBuild.result = currentBuild.result ?: 'SUCCESS'
+}
